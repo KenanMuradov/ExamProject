@@ -19,7 +19,7 @@ internal class Program
         if (!directory.Exists)
             Directory.CreateDirectory(directory.FullName);
 
-        FileInfo usersData = new($@"{directory.FullName}\UsersData.json");
+        FileInfo usersData = new($@"{directory.FullName}\WorkersUsersData.json");
         FileInfo CVData = new($@"{directory.FullName}\CVData.json");
         FileInfo VacancyData = new($@"{directory.FullName}\Vacancy.json");
 
@@ -37,16 +37,12 @@ internal class Program
         if (VacancyData.Exists)
             vacancies = JsonSerializer.Deserialize<List<Vacancy>>(File.ReadAllText(VacancyData.FullName))!;
         else
-        vacancies = new();
+            vacancies = new();
 
         if (CVData.Exists)
             cvs = JsonSerializer.Deserialize<List<CV>>(File.ReadAllText(CVData.FullName))!;
         else
             cvs = new();
-
-
-
-        Console.ReadKey(true);
 
         string[] startMenu = new[] { "Register", "Log in", "Exit" };
         string[] typeChoose = new[] { "As Worker", "As Employer", "Exit" };
@@ -56,6 +52,8 @@ internal class Program
         bool isRegistration = true;
         bool endProgram = false;
         ConsoleKeyInfo key;
+
+        Console.WriteLine("WELCOME TO BOOS.AZ");
 
         while (!exit)
         {
