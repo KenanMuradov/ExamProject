@@ -21,6 +21,7 @@ internal class Filter
 
     public static string[] FilterForEmployer = new[]
     {
+        "Filter By Required Language",
         "Filer by Education Level",
         "Filter By Experience",
         "Exit"
