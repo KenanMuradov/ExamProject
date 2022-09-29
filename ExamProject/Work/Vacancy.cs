@@ -9,6 +9,7 @@ using static HelpFunctions;
 
 internal class Vacancy
 {
+    public Guid Id { get; set; }
 
     public sbyte MaxAge { get; set; }
     public sbyte MinExperience { get; set; }
@@ -62,12 +63,12 @@ internal class Vacancy
         }
     }
 
-    public Vacancy(string? job,sbyte maxAge,sbyte minExperience, EducationLevel requiredEducation, double salary, string? information)
+    public Vacancy(string? job, sbyte maxAge, sbyte minExperience, EducationLevel requiredEducation, double salary, string? information)
     {
+        Job = job;
         MaxAge = maxAge;
         MinExperience = minExperience;
         RequiredEducation = requiredEducation;
-        Job = job;
         Salary = salary;
         Information = information;
     }
@@ -99,7 +100,7 @@ internal class Vacancy
                 Console.WriteLine("What is name of job");
                 job = Console.ReadLine()!;
                 Console.WriteLine("Salary amount");
-                if(!double.TryParse(Console.ReadLine(),out double salary))
+                if (!double.TryParse(Console.ReadLine(), out double salary))
                 {
                     Console.WriteLine("Entered Wrong information please try again");
                     Console.ReadKey(true);
@@ -126,7 +127,7 @@ internal class Vacancy
                 }
 
                 Console.WriteLine("Maximum possible age?");
-                if(!sbyte.TryParse(Console.ReadLine(),out sbyte maxAge))
+                if (!sbyte.TryParse(Console.ReadLine(), out sbyte maxAge))
                 {
                     Console.WriteLine("Entered Wrong information please try again");
                     Console.ReadKey(true);
@@ -145,11 +146,12 @@ internal class Vacancy
 
                 Console.WriteLine("Enter some information about your job");
                 information = Console.ReadLine()!;
+
                 if (string.IsNullOrWhiteSpace(job))
                     information = "No Information";
 
 
-                return new(job,maxAge,minExperience,(EducationLevel)educationLevel,salary, information);
+                return new(job, maxAge, minExperience, (EducationLevel)educationLevel, salary, information);
 
             }
             catch (Exception ex)
@@ -164,10 +166,10 @@ internal class Vacancy
 
     public override string ToString()
         => @$"Job: {Job}
-Max Age: {MaxAge}
-Min Experience: {MinExperience}
+Max Age: {MaxAge} years
+Min Experience: {MinExperience} years
 Required Education Level: {RequiredEducation}
-Salary: {Salary}
+Salary: {Salary} $
 Information about work
 {Information}";
 

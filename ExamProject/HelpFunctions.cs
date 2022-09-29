@@ -8,6 +8,8 @@ using Serilog;
 
 namespace ExamProject;
 
+using Human;
+using Work;
 internal static class HelpFunctions
 {
     public static ILogger CallLog()
@@ -15,7 +17,7 @@ internal static class HelpFunctions
         string format = @"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Level:u3}] {Message} {Exception} {MachineName} {ThreadId} {NewLine}";
 
         return Log.Logger = new LoggerConfiguration()
-    .WriteTo.File("myLog.txt", outputTemplate: format)
+    .WriteTo.File($@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\BossAzData\LogInfo.txt", outputTemplate: format)
     .CreateLogger();
 
     }
@@ -45,6 +47,90 @@ internal static class HelpFunctions
 
         if (index < 0) index = 0;
         else if (index >= max) index = max - 1;
+    }
+
+
+    public static Worker GetWorker()
+    {
+        Worker w;
+        string name;
+        string surname;
+        string phone;
+
+        while (true)
+        {
+            Console.Clear();
+            try
+            {
+                Console.WriteLine("What is your Name");
+                name = Console.ReadLine()!;
+
+                Console.WriteLine("What is your surname?");
+                surname = Console.ReadLine()!;
+
+                Console.WriteLine("Enter Your Phone number");
+                phone = Console.ReadLine()!;
+
+                Console.WriteLine("Enter Your Age");
+                if (!sbyte.TryParse(Console.ReadLine(), out sbyte age))
+                {
+                    Console.WriteLine("Entered Wrong information please try again");
+                    Console.ReadKey(true);
+                    continue;
+                }
+
+                w = new(name, surname, phone, age);
+                return w;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadKey(true);
+                continue;
+            }
+        }
+    }
+
+    public static Employer GetEmployer()
+    {
+        string name;
+        string surname;
+        string phone;
+
+        while (true)
+        {
+            Console.Clear();
+            try
+            {
+                Console.WriteLine("What is your Name");
+                name = Console.ReadLine()!;
+
+                Console.WriteLine("What is your surname?");
+                surname = Console.ReadLine()!;
+
+                Console.WriteLine("Enter Your Phone number");
+                phone = Console.ReadLine()!;
+
+                Console.WriteLine("Enter Your Age");
+                if (!sbyte.TryParse(Console.ReadLine(), out sbyte age))
+                {
+                    Console.WriteLine("Entered Wrong information please try again");
+                    Console.ReadKey(true);
+                    continue;
+                }
+
+
+                return new(name, surname, phone, age);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                Console.ReadKey(true);
+                continue;
+            }
+        }
     }
 
 }

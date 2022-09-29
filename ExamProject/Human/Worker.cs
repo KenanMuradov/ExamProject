@@ -10,15 +10,14 @@ using static HelpFunctions;
 
 internal class Worker : Person
 {
-    CV CV { get; set; }
+    public CV CV { get; set; }
 
-    public Worker(string? name, string? surname, string? phone, sbyte age, CV cv)
+    public Worker(string? name, string? surname, string? phone, sbyte age, CV cv = null!)
         : base(name, surname, phone, age)
     {
         CV = cv;
     }
-
     public override string ToString()
-        =>$@"{base.ToString()}
+        => $@"{base.ToString()}
 {CV}";
 }

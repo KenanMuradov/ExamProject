@@ -9,7 +9,7 @@ namespace ExamProject.Human;
 
 using static HelpFunctions;
 
-internal class Person
+internal abstract class Person
 {
     private string? _name;
     public string? Name
@@ -49,9 +49,9 @@ internal class Person
         get { return _phone; }
         init
         {
-            string pattern = "^05 |^07 |^01";
+            string pattern = "^\\(?([0-9])\\)?[-.\\s]?([0-9])[-.\\s]?([0-9]){7,15}$";
 
-            if (string.IsNullOrWhiteSpace(value) || Regex.Match(value!, pattern).Success || value.Length != 10)
+            if (string.IsNullOrWhiteSpace(value) || !Regex.Match(value!, pattern).Success || value.Length != 10)
             {
                 CallLog().Error("Entered Phone number is wrong");
                 throw new ArgumentException("Entered Phone number is wrong");
