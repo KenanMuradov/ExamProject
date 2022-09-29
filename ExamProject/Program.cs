@@ -19,7 +19,7 @@ internal class Program
         if (!directory.Exists)
             Directory.CreateDirectory(directory.FullName);
 
-        FileInfo usersData = new($@"{directory.FullName}\WorkersUsersData.json");
+        FileInfo usersData = new($@"{directory.FullName}\UsersData.json");
         FileInfo CVData = new($@"{directory.FullName}\CVData.json");
         FileInfo VacancyData = new($@"{directory.FullName}\Vacancy.json");
 
@@ -27,19 +27,19 @@ internal class Program
         List<CV> cvs;
         List<Vacancy> vacancies;
 
-        if (usersData.Exists)
+        if (usersData.Exists && usersData.Length > 0)
             users = JsonSerializer.Deserialize<List<User>>(File.ReadAllText(usersData.FullName))!;
         else
             users = new();
 
 
 
-        if (VacancyData.Exists)
+        if (VacancyData.Exists && VacancyData.Length > 0)
             vacancies = JsonSerializer.Deserialize<List<Vacancy>>(File.ReadAllText(VacancyData.FullName))!;
         else
             vacancies = new();
 
-        if (CVData.Exists)
+        if (CVData.Exists && CVData.Length > 0)
             cvs = JsonSerializer.Deserialize<List<CV>>(File.ReadAllText(CVData.FullName))!;
         else
             cvs = new();
@@ -54,6 +54,7 @@ internal class Program
         ConsoleKeyInfo key;
 
         Console.WriteLine("WELCOME TO BOOS.AZ");
+        Console.ReadKey(true);
 
         while (!exit)
         {
@@ -235,21 +236,14 @@ internal class Program
                     switch (index)
                     {
                         case 0:
-
-                            (currentUser!.Profile as Worker)!.CV = CV.CreateCV();
+                            currentUser!.Profile = new Worker(currentUser!.Profile!.Name, currentUser!.Profile.Surname, currentUser!.Profile.Phone, currentUser.Profile.Age, CV.CreateCV());
+                            cvs.Add((currentUser!.Profile as Worker)!.CV);
                             break;
 
                         case 1:
-                            foreach (var user in users)
+                            foreach (var v in vacancies)
                             {
-                                if (user.Profile is Employer e)
-                                {
-                                    foreach (var v in e.Vacancies)
-                                    {
-                                        Console.WriteLine(v);
-                                        Console.WriteLine();
-                                    }
-                                }
+                                Console.WriteLine(v);
                             }
                             Console.ReadKey(true);
                             break;
@@ -272,7 +266,7 @@ internal class Program
                                     {
                                         case 0:
                                             Console.WriteLine("Enter minimum salary");
-                                            if (double.TryParse(Console.ReadLine()!, out double minSalary))
+                                            if (!double.TryParse(Console.ReadLine()!, out double minSalary))
                                             {
                                                 CallLog().Error("Filter Error");
                                                 Console.WriteLine("Entered Wrong information");
@@ -281,7 +275,7 @@ internal class Program
                                             }
 
                                             Console.WriteLine("Enter maximum salary");
-                                            if (double.TryParse(Console.ReadLine()!, out double maxSalary))
+                                            if (!double.TryParse(Console.ReadLine()!, out double maxSalary))
                                             {
                                                 CallLog().Error("Filter Error");
                                                 Console.WriteLine("Entered Wrong information");
@@ -305,7 +299,7 @@ internal class Program
 
                                         case 1:
                                             Console.WriteLine("Enter The age");
-                                            if (sbyte.TryParse(Console.ReadLine()!, out sbyte age))
+                                            if (!sbyte.TryParse(Console.ReadLine()!, out sbyte age))
                                             {
                                                 CallLog().Error("Filter Error");
                                                 Console.WriteLine("Entered Wrong information");
@@ -357,7 +351,7 @@ internal class Program
                                         case 3:
 
                                             Console.WriteLine("Enter The experience in years");
-                                            if (sbyte.TryParse(Console.ReadLine()!, out sbyte experience))
+                                            if (!sbyte.TryParse(Console.ReadLine()!, out sbyte experience))
                                             {
                                                 CallLog().Error("Filter Error");
                                                 Console.WriteLine("Entered Wrong information");
@@ -411,10 +405,9 @@ internal class Program
                             break;
 
                         case 1:
-                            foreach (var user in users)
+                            foreach (var cv in cvs)
                             {
-                                if (user.Profile is Worker w)
-                                    Console.WriteLine(w.CV);
+                                Console.WriteLine(cv);
                             }
                             Console.ReadKey(true);
                             break;
@@ -465,8 +458,8 @@ internal class Program
                                                 continue;
                                             }
 
-                                            foreach (var worker in Filter.FilterCVsByEducationLevel(cvs!, (EducationLevel)educationLevel))
-                                                Console.WriteLine(worker);
+                                            foreach (var cv in Filter.FilterCVsByEducationLevel(cvs!, (EducationLevel)educationLevel))
+                                                Console.WriteLine(cv);
 
                                             Console.ReadKey(true);
                                             break;
@@ -475,7 +468,7 @@ internal class Program
                                         case 2:
 
                                             Console.WriteLine("Enter The experience in years");
-                                            if (sbyte.TryParse(Console.ReadLine()!, out sbyte experience))
+                                            if (!sbyte.TryParse(Console.ReadLine()!, out sbyte experience))
                                             {
                                                 CallLog().Error("Filter Error");
                                                 Console.WriteLine("Entered Wrong information");
@@ -483,8 +476,8 @@ internal class Program
                                                 continue;
                                             }
 
-                                            foreach (var worker in Filter.FilterCVsByExperience(cvs!, experience))
-                                                Console.WriteLine(worker);
+                                            foreach (var cv in Filter.FilterCVsByExperience(cvs!, experience))
+                                                Console.WriteLine(cv);
 
                                             Console.ReadKey(true);
                                             break;

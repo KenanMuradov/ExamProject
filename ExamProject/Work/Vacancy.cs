@@ -12,7 +12,7 @@ internal class Vacancy
 {
     public sbyte MaxAge { get; set; }
     public sbyte MinExperience { get; set; }
-    public sbyte RequiredEducation { get; set; }
+    public EducationLevel RequiredEducation { get; set; }
 
     private string? _job;
     public string? Job
@@ -67,7 +67,7 @@ internal class Vacancy
         Job = job;
         MaxAge = maxAge;
         MinExperience = minExperience;
-        RequiredEducation = (sbyte)requiredEducation;
+        RequiredEducation = requiredEducation;
         Salary = salary;
         Information = information;
     }
