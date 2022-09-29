@@ -21,7 +21,7 @@ internal class Program
 
         FileInfo usersData = new($@"{directory.FullName}\UsersData.json");
         FileInfo CVData = new($@"{directory.FullName}\CVData.json");
-        FileInfo VacancyData = new($@"{directory.FullName}\WorkersData.json");
+        FileInfo VacancyData = new($@"{directory.FullName}\Vacancy.json");
 
         List<User> users = new();
         List<CV> cvs;
@@ -37,26 +37,12 @@ internal class Program
         if (VacancyData.Exists)
             vacancies = JsonSerializer.Deserialize<List<Vacancy>>(File.ReadAllText(VacancyData.FullName))!;
         else
-        {
-            vacancies = new();
-            foreach (var user in users)
-            {
-                if (user.Profile is Employer e)
-                    vacancies.AddRange(e.Vacancies);
-            }
-        }
+        vacancies = new();
 
         if (CVData.Exists)
             cvs = JsonSerializer.Deserialize<List<CV>>(File.ReadAllText(CVData.FullName))!;
         else
-        {
             cvs = new();
-            foreach (var user in users)
-            {
-                if (user.Profile is Worker w)
-                    cvs.Add(w.CV);
-            }
-        }
 
 
 
@@ -423,6 +409,7 @@ internal class Program
                         case 0:
 
                             (currentUser!.Profile as Employer)!.AddVacancy();
+                            vacancies!.Add((currentUser!.Profile as Employer)!.Vacancies[(currentUser!.Profile as Employer)!.Vacancies.Count - 1]);
                             break;
 
                         case 1:
@@ -525,7 +512,7 @@ internal class Program
 
 
         File.WriteAllText(usersData.FullName, JsonSerializer.Serialize(users));
-        File.WriteAllText(CVData.FullName, JsonSerializer.Serialize(CVData));
+        File.WriteAllText(CVData.FullName, JsonSerializer.Serialize(cvs));
         File.WriteAllText(VacancyData.FullName, JsonSerializer.Serialize(vacancies));
     }
 }

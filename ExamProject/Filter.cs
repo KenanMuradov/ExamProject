@@ -52,7 +52,7 @@ internal class Filter
     {
         List<Vacancy> vacancyList = new();
 
-        vacancyList.AddRange(vacancies.FindAll(v => v.RequiredEducation <= educationLevel));
+        vacancyList.AddRange(vacancies.FindAll(v => v.RequiredEducation <= (sbyte)educationLevel));
 
         return vacancyList;
 
