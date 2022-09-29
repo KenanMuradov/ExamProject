@@ -19,15 +19,48 @@ internal class Program
         if (!directory.Exists)
             Directory.CreateDirectory(directory.FullName);
 
-        FileInfo data = new($@"{directory.FullName}\UsersData.json");
+        FileInfo usersData = new($@"{directory.FullName}\UsersData.json");
+        FileInfo CVData = new($@"{directory.FullName}\CVData.json");
+        FileInfo VacancyData = new($@"{directory.FullName}\WorkersData.json");
 
-        List<User> users;
+        List<User> users = new();
+        List<CV> cvs;
+        List<Vacancy> vacancies;
 
-        if (data.Exists)
-            users = JsonSerializer.Deserialize<List<User>>(File.ReadAllText(data.FullName))!;
+        if (usersData.Exists)
+            users = JsonSerializer.Deserialize<List<User>>(File.ReadAllText(usersData.FullName))!;
         else
             users = new();
 
+
+
+        if (VacancyData.Exists)
+            vacancies = JsonSerializer.Deserialize<List<Vacancy>>(File.ReadAllText(VacancyData.FullName))!;
+        else
+        {
+            vacancies = new();
+            foreach (var user in users)
+            {
+                if (user.Profile is Employer e)
+                    vacancies.AddRange(e.Vacancies);
+            }
+        }
+
+        if (CVData.Exists)
+            cvs = JsonSerializer.Deserialize<List<CV>>(File.ReadAllText(CVData.FullName))!;
+        else
+        {
+            cvs = new();
+            foreach (var user in users)
+            {
+                if (user.Profile is Worker w)
+                    cvs.Add(w.CV);
+            }
+        }
+
+
+
+        Console.ReadKey(true);
 
         string[] startMenu = new[] { "Register", "Log in", "Exit" };
         string[] typeChoose = new[] { "As Worker", "As Employer", "Exit" };
@@ -184,15 +217,7 @@ internal class Program
         }
 
 
-        List<Worker?> workers = new();
 
-        foreach (var user in users.FindAll(u => u.Profile is Worker))
-            workers.Add(user.Profile as Worker);
-
-        List<Employer?> employers = new();
-
-        foreach (var user in users.FindAll(u => u.Profile is Employer))
-            employers.Add(user.Profile as Employer);
 
         string[] workerCommands = new[] { "Create CV", "See Vacancies", "Filter Vacancies", "Exit" };
         string[] employerCommands = new[] { "Add vacancy", "See CVs", "Filter Workers", "Exit" };
@@ -211,7 +236,7 @@ internal class Program
 
         index = 0;
 
-        if (currentUser?.Profile is Worker)
+        if (!isEmployer)
         {
             while (!exit)
             {
@@ -227,7 +252,7 @@ internal class Program
                     {
                         case 0:
 
-                            (currentUser.Profile as Worker)!.CV = CV.CreateCV();
+                            (currentUser!.Profile as Worker)!.CV = CV.CreateCV();
                             break;
 
                         case 1:
@@ -288,7 +313,7 @@ internal class Program
                                                 continue;
                                             }
 
-                                            foreach (var vacany in Filter.FilterVacancyBySalary(employers!, minSalary, maxSalary))
+                                            foreach (var vacany in Filter.FilterVacancyBySalary(vacancies!, minSalary, maxSalary))
                                                 Console.WriteLine(vacany);
 
                                             Console.ReadKey(true);
@@ -312,7 +337,7 @@ internal class Program
                                                 continue;
                                             }
 
-                                            foreach (var vacancy in Filter.FilterVacancyByAge(employers!, age))
+                                            foreach (var vacancy in Filter.FilterVacancyByAge(vacancies!, age))
                                                 Console.WriteLine(vacancy);
 
                                             Console.ReadKey(true);
@@ -338,7 +363,7 @@ internal class Program
                                                 continue;
                                             }
 
-                                            foreach (var vacancy in Filter.FilterVacancyByEducation(employers!, (EducationLevel)educationLevel))
+                                            foreach (var vacancy in Filter.FilterVacancyByEducation(vacancies!, (EducationLevel)educationLevel))
                                                 Console.WriteLine(vacancy);
 
                                             Console.ReadKey(true);
@@ -356,21 +381,151 @@ internal class Program
                                                 continue;
                                             }
 
-                                            foreach (var vacancy in Filter.FilterVacancyByExperience(employers!, experience))
+                                            foreach (var vacancy in Filter.FilterVacancyByExperience(vacancies!, experience))
                                                 Console.WriteLine(vacancy);
 
                                             Console.ReadKey(true);
                                             break;
 
+                                        case 4:
+                                            exit = true;
+
+                                            break;
+
                                     }
                                 }
                             }
-
+                            exit = false;
                             break;
+
+                        case 3:
+                            exit = true;
+                            break;
+
+                    }
+                }
+            }
+        }
+        else
+        {
+            while (!exit)
+            {
+                Console.Clear();
+                ShowMenu(employerCommands, index);
+                key = Console.ReadKey(true);
+
+                Cursor(key, employerCommands.Length, ref index);
+
+                if (key.Key == ConsoleKey.Enter)
+                {
+                    switch (index)
+                    {
+                        case 0:
+
+                            (currentUser!.Profile as Employer)!.AddVacancy();
+                            break;
+
+                        case 1:
+                            foreach (var user in users)
+                            {
+                                if (user.Profile is Worker w)
+                                    Console.WriteLine(w.CV);
+                            }
+                            Console.ReadKey(true);
+                            break;
+
+
+                        case 2:
+                            index = 0;
+                            while (!exit)
+                            {
+                                Console.Clear();
+                                ShowMenu(Filter.FilterForWorker, index);
+                                key = Console.ReadKey(true);
+
+                                Cursor(key, Filter.FilterForWorker.Length, ref index);
+
+                                if (key.Key == ConsoleKey.Enter)
+                                {
+                                    Console.Clear();
+                                    switch (index)
+                                    {
+                                        case 0:
+                                            Console.WriteLine("Enter Needed language age");
+                                            string language = Console.ReadLine()!;
+
+                                            foreach (var worker in Filter.FilterCVsByNeedLanguae(cvs!, language))
+                                                Console.WriteLine(worker);
+
+                                            Console.ReadKey(true);
+                                            break;
+
+                                        case 1:
+                                            Console.WriteLine("Enter education level(1-6)");
+                                            foreach (var e in educationLevels)
+                                                Console.WriteLine(e);
+
+                                            if (!sbyte.TryParse(Console.ReadLine(), out sbyte educationLevel))
+                                            {
+                                                Console.WriteLine("Entered Wrong information please try again");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            educationLevel--;
+                                            if (educationLevel < 0 || educationLevel > 5)
+                                            {
+                                                Console.WriteLine("Entered Wrong information please try again");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            foreach (var worker in Filter.FilterCVsByEducationLevel(cvs!, (EducationLevel)educationLevel))
+                                                Console.WriteLine(worker);
+
+                                            Console.ReadKey(true);
+                                            break;
+
+
+                                        case 2:
+
+                                            Console.WriteLine("Enter The experience in years");
+                                            if (sbyte.TryParse(Console.ReadLine()!, out sbyte experience))
+                                            {
+                                                CallLog().Error("Filter Error");
+                                                Console.WriteLine("Entered Wrong information");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            foreach (var worker in Filter.FilterCVsByExperience(cvs!, experience))
+                                                Console.WriteLine(worker);
+
+                                            Console.ReadKey(true);
+                                            break;
+                                        case 3:
+                                            exit = true;
+
+                                            break;
+
+                                    }
+                                }
+                            }
+                            exit = false;
+                            break;
+
+                        case 3:
+                            exit = true;
+                            break;
+
                     }
                 }
             }
         }
 
+
+        File.WriteAllText(usersData.FullName, JsonSerializer.Serialize(users));
+        File.WriteAllText(CVData.FullName, JsonSerializer.Serialize(CVData));
+        File.WriteAllText(VacancyData.FullName, JsonSerializer.Serialize(vacancies));
     }
 }

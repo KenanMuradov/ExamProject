@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace ExamProject.Human;
 
 using static HelpFunctions;
 
-internal abstract class Person
+internal class Person
 {
     private string? _name;
     public string? Name
@@ -51,7 +52,7 @@ internal abstract class Person
         {
             string pattern = "^\\(?([0-9])\\)?[-.\\s]?([0-9])[-.\\s]?([0-9]){7,15}$";
 
-            if (string.IsNullOrWhiteSpace(value) || !Regex.Match(value!, pattern).Success || value.Length != 10)
+            if (string.IsNullOrWhiteSpace(value) || !Regex.Match(value!, pattern).Success)
             {
                 CallLog().Error("Entered Phone number is wrong");
                 throw new ArgumentException("Entered Phone number is wrong");
@@ -78,12 +79,21 @@ internal abstract class Person
         }
     }
 
+    [JsonConstructor]
     public Person(string? name,  string? surname,  string? phone, sbyte age)
     {
         Name = name;
         Surname = surname;
         Phone = phone;
         Age = age;
+    }
+
+    public Person()
+    {
+        Name = default;
+        Surname = default;
+        Phone = default;
+        Age = default;
     }
 
     public override string ToString()

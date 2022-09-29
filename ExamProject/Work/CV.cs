@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ExamProject.Work;
@@ -13,7 +14,7 @@ internal class CV
 {
     public List<string?>? WorkedCompanies { get; }
     public List<string?>? Skills { get; }
-    public List<string?>? languages { get; }
+    public List<string?>? Languages { get; }
     public sbyte Experience { get; set; }
     public EducationLevel EducationLevel { get; }
 
@@ -52,7 +53,7 @@ internal class CV
     public CV(string? speciality, List<string?>? skills, List<string?>? workedCompanies, List<string?>? languages, sbyte experience, string? finishedSchool,EducationLevel educationLevel)
     {
         WorkedCompanies = workedCompanies;
-        this.languages = languages;
+        this.Languages = languages;
         Experience = experience;
         Speciality = speciality;
         FinishedSchool = finishedSchool;
@@ -116,6 +117,8 @@ internal class CV
                 Console.WriteLine("Which languages do you perfectly know");
                 languages = Console.ReadLine()!.Split(' ').ToList()!;
 
+                languages.ForEach(f => f = f!.ToLower());
+
                 Console.WriteLine("How much experience do you have?(in years)");
                 if (!sbyte.TryParse(Console.ReadLine(), out sbyte experience))
                 {
@@ -154,7 +157,7 @@ internal class CV
         Console.WriteLine();
 
         Console.WriteLine("Languages");
-        foreach (var l in languages!)
+        foreach (var l in Languages!)
             Console.Write($"{l} ");
         Console.WriteLine();
 

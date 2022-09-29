@@ -21,56 +21,55 @@ internal class Filter
 
     public static string[] FilterForEmployer = new[]
     {
-        "Filter by salary",
-        "Filter by Age",
-        "Required Education Level",
-        "Needed Minimum Experience",
+        "Filer by Education Level",
+        "Filter By Experience",
         "Exit"
     };
 
 
-    public static List<Vacancy> FilterVacancyByAge(List<Employer> employers, sbyte yourAge)
+    public static List<Vacancy> FilterVacancyByAge(List<Vacancy> vacancies, sbyte yourAge)
     {
-        List<Vacancy> vacancyList = new List<Vacancy>();
+        List<Vacancy> vacancyList = new();
 
-        foreach (var e in employers)
-            vacancyList.AddRange(e.Vacancies.FindAll(v => v.MaxAge >= yourAge));
+        vacancyList.AddRange(vacancies.FindAll(v => v.MaxAge >= yourAge));
 
         return vacancyList;
 
     }
 
-    public static List<Vacancy> FilterVacancyBySalary(List<Employer> employers, double minSalary, double maxSalary)
+    public static List<Vacancy> FilterVacancyBySalary(List<Vacancy> vacancies, double minSalary, double maxSalary)
     {
-        List<Vacancy> vacancyList = new List<Vacancy>();
+        List<Vacancy> vacancyList = new();
 
-        foreach (var e in employers)
-            vacancyList.AddRange(e.Vacancies.FindAll(v => v.Salary >= minSalary && v.Salary <= maxSalary));
+        vacancyList.AddRange(vacancies.FindAll(v => v.Salary >= minSalary && v.Salary <= maxSalary));
+
 
         return vacancyList;
 
     }
 
-    public static List<Vacancy> FilterVacancyByEducation(List<Employer> employers, EducationLevel educationLevel)
+    public static List<Vacancy> FilterVacancyByEducation(List<Vacancy> vacancies, EducationLevel educationLevel)
     {
-        List<Vacancy> vacancyList = new List<Vacancy>();
+        List<Vacancy> vacancyList = new();
 
-        foreach (var e in employers)
-            vacancyList.AddRange(e.Vacancies.FindAll(v => v.RequiredEducation <= educationLevel));
+        vacancyList.AddRange(vacancies.FindAll(v => v.RequiredEducation <= educationLevel));
 
         return vacancyList;
 
     }
 
-    public static List<Vacancy> FilterVacancyByExperience(List<Employer> employers, sbyte experience)
+    public static List<Vacancy> FilterVacancyByExperience(List<Vacancy> vacancies, sbyte experience)
     {
-        List<Vacancy> vacancyList = new List<Vacancy>();
+        List<Vacancy> vacancyList = new();
 
-        foreach (var e in employers)
-            vacancyList.AddRange(e.Vacancies.FindAll(v => v.MinExperience <= experience));
+        vacancyList.AddRange(vacancies.FindAll(v => v.MinExperience <= experience));
 
         return vacancyList;
 
     }
+
+    public static List<CV> FilterCVsByNeedLanguae(List<CV> workers, string language) => workers.FindAll(cv => cv.Languages!.Contains(language.ToLower()));
+    public static List<CV> FilterCVsByEducationLevel(List<CV> workers, EducationLevel educationLevel) => workers.FindAll(cv => cv.EducationLevel >= educationLevel);
+    public static List<CV> FilterCVsByExperience(List<CV> workers, sbyte experience) => workers.FindAll(cv => cv.Experience >= experience);
 
 }

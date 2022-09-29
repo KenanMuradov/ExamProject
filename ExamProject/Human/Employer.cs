@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ExamProject.Human;
@@ -10,6 +11,7 @@ namespace ExamProject.Human;
 internal class Employer : Person
 {
     public List<Vacancy> Vacancies { get; set; }
+
 
     public Employer(string? name, string? surname, string? phone, sbyte age) : base(name, surname, phone, age)
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ExamProject.Work;
@@ -9,8 +10,6 @@ using static HelpFunctions;
 
 internal class Vacancy
 {
-    public Guid Id { get; set; }
-
     public sbyte MaxAge { get; set; }
     public sbyte MinExperience { get; set; }
     public EducationLevel RequiredEducation { get; set; }
