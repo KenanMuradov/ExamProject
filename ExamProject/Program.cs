@@ -53,7 +53,7 @@ internal class Program
         bool endProgram = false;
         ConsoleKeyInfo key;
 
-        Console.WriteLine("WELCOME TO BOOS.AZ");
+        Console.WriteLine("WELCOME TO BOSS.AZ");
         Console.ReadKey(true);
 
         while (!exit)
@@ -223,6 +223,8 @@ internal class Program
 
         if (!isEmployer)
         {
+            currentUser!.Profile = new Worker(currentUser!.Profile!.Name, currentUser!.Profile.Surname, currentUser!.Profile.Phone, currentUser.Profile.Age, CV.CreateCV());
+
             while (!exit)
             {
                 Console.Clear();
@@ -236,7 +238,6 @@ internal class Program
                     switch (index)
                     {
                         case 0:
-                            currentUser!.Profile = new Worker(currentUser!.Profile!.Name, currentUser!.Profile.Surname, currentUser!.Profile.Phone, currentUser.Profile.Age, CV.CreateCV());
                             cvs.Add((currentUser!.Profile as Worker)!.CV);
                             break;
 
@@ -386,6 +387,8 @@ internal class Program
         }
         else
         {
+            currentUser!.Profile = new Employer(currentUser!.Profile!.Name, currentUser!.Profile.Surname, currentUser!.Profile.Phone, currentUser.Profile.Age);
+
             while (!exit)
             {
                 Console.Clear();
