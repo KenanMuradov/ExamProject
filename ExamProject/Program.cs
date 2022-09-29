@@ -128,10 +128,6 @@ internal class Program
                     Console.WriteLine("Enter your password(Minimum 8 characters required at least 1 number 1 low case 1 upper case )");
                     password = Console.ReadLine()!;
 
-
-
-
-
                     currentUser = new(username, password);
 
                     if (isEmployer)
@@ -188,9 +184,28 @@ internal class Program
         }
 
 
+        List<Worker?> workers = new();
+
+        foreach (var user in users.FindAll(u => u.Profile is Worker))
+            workers.Add(user.Profile as Worker);
+
+        List<Employer?> employers = new();
+
+        foreach (var user in users.FindAll(u => u.Profile is Employer))
+            employers.Add(user.Profile as Employer);
 
         string[] workerCommands = new[] { "Create CV", "See Vacancies", "Filter Vacancies", "Exit" };
-        string[] employerCommands = new[] { "See CVs", "Filter Workers", "Exit" };
+        string[] employerCommands = new[] { "Add vacancy", "See CVs", "Filter Workers", "Exit" };
+
+        string[] educationLevels = new string[]
+        {
+            EducationLevel.None.ToString(),
+            EducationLevel.MiddleSchool.ToString(),
+            EducationLevel.HighSchool.ToString(),
+            EducationLevel.Bachelor.ToString(),
+            EducationLevel.Master.ToString(),
+            EducationLevel.Doctorate.ToString(),
+        };
 
         exit = false;
 
@@ -206,11 +221,12 @@ internal class Program
 
                 Cursor(key, workerCommands.Length, ref index);
 
-                if (key.Key == ConsoleKey.Clear)
+                if (key.Key == ConsoleKey.Enter)
                 {
                     switch (index)
                     {
                         case 0:
+
                             (currentUser.Profile as Worker)!.CV = CV.CreateCV();
                             break;
 
@@ -231,6 +247,124 @@ internal class Program
 
 
                         case 2:
+                            index = 0;
+                            while (!exit)
+                            {
+                                Console.Clear();
+                                ShowMenu(Filter.FilterForWorker, index);
+                                key = Console.ReadKey(true);
+
+                                Cursor(key, Filter.FilterForWorker.Length, ref index);
+
+                                if (key.Key == ConsoleKey.Enter)
+                                {
+                                    Console.Clear();
+                                    switch (index)
+                                    {
+                                        case 0:
+                                            Console.WriteLine("Enter minimum salary");
+                                            if (double.TryParse(Console.ReadLine()!, out double minSalary))
+                                            {
+                                                CallLog().Error("Filter Error");
+                                                Console.WriteLine("Entered Wrong information");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            Console.WriteLine("Enter maximum salary");
+                                            if (double.TryParse(Console.ReadLine()!, out double maxSalary))
+                                            {
+                                                CallLog().Error("Filter Error");
+                                                Console.WriteLine("Entered Wrong information");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            if (minSalary > maxSalary)
+                                            {
+                                                CallLog().Error("Filter Error");
+                                                Console.WriteLine("Entered Wrong information");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            foreach (var vacany in Filter.FilterVacancyBySalary(employers!, minSalary, maxSalary))
+                                                Console.WriteLine(vacany);
+
+                                            Console.ReadKey(true);
+                                            break;
+
+                                        case 1:
+                                            Console.WriteLine("Enter The age");
+                                            if (sbyte.TryParse(Console.ReadLine()!, out sbyte age))
+                                            {
+                                                CallLog().Error("Filter Error");
+                                                Console.WriteLine("Entered Wrong information");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            if (age < 18)
+                                            {
+                                                CallLog().Error("Filter Error");
+                                                Console.WriteLine("Entered Wrong information");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            foreach (var vacancy in Filter.FilterVacancyByAge(employers!, age))
+                                                Console.WriteLine(vacancy);
+
+                                            Console.ReadKey(true);
+                                            break;
+
+                                        case 2:
+                                            Console.WriteLine("Enter education level(1-6)");
+                                            foreach (var e in educationLevels)
+                                                Console.WriteLine(e);
+
+                                            if (!sbyte.TryParse(Console.ReadLine(), out sbyte educationLevel))
+                                            {
+                                                Console.WriteLine("Entered Wrong information please try again");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            educationLevel--;
+                                            if (educationLevel < 0 || educationLevel > 5)
+                                            {
+                                                Console.WriteLine("Entered Wrong information please try again");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            foreach (var vacancy in Filter.FilterVacancyByEducation(employers!, (EducationLevel)educationLevel))
+                                                Console.WriteLine(vacancy);
+
+                                            Console.ReadKey(true);
+                                            break;
+
+
+                                        case 3:
+
+                                            Console.WriteLine("Enter The experience in years");
+                                            if (sbyte.TryParse(Console.ReadLine()!, out sbyte experience))
+                                            {
+                                                CallLog().Error("Filter Error");
+                                                Console.WriteLine("Entered Wrong information");
+                                                Console.ReadKey(true);
+                                                continue;
+                                            }
+
+                                            foreach (var vacancy in Filter.FilterVacancyByExperience(employers!, experience))
+                                                Console.WriteLine(vacancy);
+
+                                            Console.ReadKey(true);
+                                            break;
+
+                                    }
+                                }
+                            }
 
                             break;
                     }

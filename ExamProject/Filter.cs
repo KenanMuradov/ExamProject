@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ExamProject.Filter;
+namespace ExamProject;
 using ExamProject.Human;
 using ExamProject.Work;
 
@@ -15,7 +15,8 @@ internal class Filter
         "Filter by salary",
         "Filter by Age",
         "Required Education Level",
-        "Needed Minimum Experience"
+        "Needed Minimum Experience",
+        "Exit"
     };
 
     public static string[] FilterForEmployer = new[]
@@ -23,7 +24,8 @@ internal class Filter
         "Filter by salary",
         "Filter by Age",
         "Required Education Level",
-        "Needed Minimum Experience"
+        "Needed Minimum Experience",
+        "Exit"
     };
 
 
@@ -44,6 +46,28 @@ internal class Filter
 
         foreach (var e in employers)
             vacancyList.AddRange(e.Vacancies.FindAll(v => v.Salary >= minSalary && v.Salary <= maxSalary));
+
+        return vacancyList;
+
+    }
+
+    public static List<Vacancy> FilterVacancyByEducation(List<Employer> employers, EducationLevel educationLevel)
+    {
+        List<Vacancy> vacancyList = new List<Vacancy>();
+
+        foreach (var e in employers)
+            vacancyList.AddRange(e.Vacancies.FindAll(v => v.RequiredEducation <= educationLevel));
+
+        return vacancyList;
+
+    }
+
+    public static List<Vacancy> FilterVacancyByExperience(List<Employer> employers, sbyte experience)
+    {
+        List<Vacancy> vacancyList = new List<Vacancy>();
+
+        foreach (var e in employers)
+            vacancyList.AddRange(e.Vacancies.FindAll(v => v.MinExperience <= experience));
 
         return vacancyList;
 

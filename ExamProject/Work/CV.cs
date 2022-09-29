@@ -15,7 +15,7 @@ internal class CV
     public List<string?>? Skills { get; }
     public List<string?>? languages { get; }
     public sbyte Experience { get; set; }
-    EducationLevel EducationLevel { get; }
+    public EducationLevel EducationLevel { get; }
 
     private string? _speciality;
     public string? Speciality

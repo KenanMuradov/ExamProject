@@ -52,7 +52,7 @@ internal static class HelpFunctions
 
     public static Worker GetWorker()
     {
-        Worker w;
+        Worker worker;
         string name;
         string surname;
         string phone;
@@ -79,8 +79,8 @@ internal static class HelpFunctions
                     continue;
                 }
 
-                w = new(name, surname, phone, age);
-                return w;
+                worker = new(name, surname, phone, age);
+                return worker;
 
             }
             catch (Exception ex)
