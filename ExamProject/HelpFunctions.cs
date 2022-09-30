@@ -10,8 +10,16 @@ namespace ExamProject;
 
 using Human;
 using Work;
-internal static class HelpFunctions
+internal static class Help
 {
+
+    public static string[] startMenu = new[] { "Register", "Log in", "Exit" };
+    public static string[] typeChoose = new[] { "As Worker", "As Employer", "Back", "Exit" };
+    public static string[] workerCommands = new[] { "Create CV", "See Vacancies", "Filter Vacancies", "Back", "Exit" };
+    public static string[] employerCommands = new[] { "Add vacancy", "See CVs", "Filter Workers", "Back", "Exit" };
+
+
+
     public static ILogger CallLog()
     {
         string format = @"[{Timestamp:dd/MM/yyyy HH:mm:ss} {Level:u3}] {Message} {Exception} {MachineName} {ThreadId} {NewLine}";

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ExamProject.Human;
 
-using static HelpFunctions;
+using static Help;
 
 internal class Person
 {

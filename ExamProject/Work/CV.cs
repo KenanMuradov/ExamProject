@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace ExamProject.Work;
-using static HelpFunctions;
+using static Help;
 
 enum EducationLevel : sbyte { None, MiddleSchool, HighSchool, Bachelor, Master, Doctorate }
 

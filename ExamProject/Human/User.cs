@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ExamProject.Human;
-using static HelpFunctions;
+using static Help;
 
 internal class User
 {

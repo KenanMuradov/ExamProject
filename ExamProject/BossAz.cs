@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ExamProject;
 
-using static HelpFunctions;
+using static Help;
 using ExamProject.Human;
 using ExamProject.Work;
 
@@ -46,7 +46,6 @@ internal static class BossAz
         else
             cvs = new();
 
-        string[] startMenu = new[] { "Register", "Log in", "Exit" };
         int index = 0;
         bool isEmployer = false;
         bool isRegistration = true;
@@ -90,7 +89,6 @@ internal static class BossAz
         if (endProgram)
             Environment.Exit(0);
 
-        string[] typeChoose = new[] { "As Worker", "As Employer", "Back", "Exit" };
 
     register:
 
@@ -214,8 +212,7 @@ internal static class BossAz
 
 
 
-        string[] workerCommands = new[] { "Create CV", "See Vacancies", "Filter Vacancies", "Back", "Exit" };
-        string[] employerCommands = new[] { "Add vacancy", "See CVs", "Filter Workers", "Back", "Exit" };
+        
 
         string[] educationLevels = new string[]
         {
