@@ -1,13 +1,5 @@
 ﻿using ExamProject.Work;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-
 namespace ExamProject.Human;
-using static HelpFunctions;
 
 internal class Worker : Person
 {

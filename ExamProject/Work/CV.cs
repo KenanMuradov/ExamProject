@@ -50,7 +50,7 @@ internal class CV
         }
     }
 
-    public CV(string? speciality, List<string?>? skills, List<string?>? workedCompanies, List<string?>? languages, sbyte experience, string? finishedSchool,EducationLevel educationLevel)
+    public CV(string? speciality, List<string?>? skills, List<string?>? workedCompanies, List<string?>? languages, sbyte experience, string? finishedSchool, EducationLevel educationLevel)
     {
         WorkedCompanies = workedCompanies;
         this.Languages = languages;
@@ -99,8 +99,8 @@ internal class CV
                     Console.ReadKey(true);
                     continue;
                 }
-
                 educationLevel--;
+
                 if (educationLevel < 0 || educationLevel > 5)
                 {
                     Console.WriteLine("Entered Wrong information please try again");
@@ -128,7 +128,7 @@ internal class CV
                 }
 
 
-                return new(speciality, skills, workedCompanies, languages, experience, finishedSchool,(EducationLevel)educationLevel);
+                return new(speciality, skills, workedCompanies, languages, experience, finishedSchool, (EducationLevel)educationLevel);
 
             }
             catch (Exception ex)

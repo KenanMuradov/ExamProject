@@ -7,7 +7,7 @@ internal class Program
 {
     static void Main()
     {
-
-
+        BossAz.Run();
+        
     }
 }

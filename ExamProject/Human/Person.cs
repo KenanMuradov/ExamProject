@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ExamProject.Human;
 
@@ -79,21 +74,12 @@ internal class Person
         }
     }
 
-    [JsonConstructor]
     public Person(string? name,  string? surname,  string? phone, sbyte age)
     {
         Name = name;
         Surname = surname;
         Phone = phone;
         Age = age;
-    }
-
-    public Person()
-    {
-        Name = default;
-        Surname = default;
-        Phone = default;
-        Age = default;
     }
 
     public override string ToString()

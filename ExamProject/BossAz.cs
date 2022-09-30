@@ -47,9 +47,7 @@ internal static class BossAz
             cvs = new();
 
         string[] startMenu = new[] { "Register", "Log in", "Exit" };
-        string[] typeChoose = new[] { "As Worker", "As Employer", "Exit" };
         int index = 0;
-        bool exit = false;
         bool isEmployer = false;
         bool isRegistration = true;
         bool endProgram = false;
@@ -57,6 +55,9 @@ internal static class BossAz
 
         Console.WriteLine("WELCOME TO BOSS.AZ");
         Console.ReadKey(true);
+
+    start:
+        bool exit = false;
 
         while (!exit)
         {
@@ -89,8 +90,11 @@ internal static class BossAz
         if (endProgram)
             Environment.Exit(0);
 
-        exit = false;
+        string[] typeChoose = new[] { "As Worker", "As Employer", "Back", "Exit" };
 
+    register:
+
+        exit = false;
         while (!exit)
         {
             Console.Clear();
@@ -111,7 +115,11 @@ internal static class BossAz
                         isEmployer = true;
                         exit = true;
                         break;
+
                     case 2:
+                        goto start;
+
+                    case 3:
                         endProgram = true;
                         exit = true;
                         break;
@@ -206,8 +214,8 @@ internal static class BossAz
 
 
 
-        string[] workerCommands = new[] { "Create CV", "See Vacancies", "Filter Vacancies", "Exit" };
-        string[] employerCommands = new[] { "Add vacancy", "See CVs", "Filter Workers", "Exit" };
+        string[] workerCommands = new[] { "Create CV", "See Vacancies", "Filter Vacancies", "Back", "Exit" };
+        string[] employerCommands = new[] { "Add vacancy", "See CVs", "Filter Workers", "Back", "Exit" };
 
         string[] educationLevels = new string[]
         {
@@ -225,7 +233,7 @@ internal static class BossAz
 
         if (!isEmployer)
         {
-            currentUser!.Profile = new Worker(currentUser!.Profile!.Name, currentUser!.Profile.Surname, currentUser!.Profile.Phone, currentUser.Profile.Age, CV.CreateCV());
+            currentUser!.Profile = new Worker(currentUser!.Profile!.Name, currentUser!.Profile.Surname, currentUser!.Profile.Phone, currentUser.Profile.Age);
 
             while (!exit)
             {
@@ -240,11 +248,12 @@ internal static class BossAz
                     switch (index)
                     {
                         case 0:
+                            (currentUser!.Profile as Worker)!.CV = CV.CreateCV();
                             cvs.Add((currentUser!.Profile as Worker)!.CV);
                             break;
 
                         case 1:
-                            foreach (var v in vacancies)
+                            foreach (var v in vacancies!)
                             {
                                 Console.WriteLine(v);
                             }
@@ -370,7 +379,6 @@ internal static class BossAz
 
                                         case 4:
                                             exit = true;
-
                                             break;
 
                                     }
@@ -380,6 +388,9 @@ internal static class BossAz
                             break;
 
                         case 3:
+                            goto register;
+
+                        case 4:
                             exit = true;
                             break;
 
@@ -405,8 +416,8 @@ internal static class BossAz
                     {
                         case 0:
 
-                            (currentUser!.Profile as Employer)!.AddVacancy();
-                            vacancies!.Add((currentUser!.Profile as Employer)!.Vacancies[(currentUser!.Profile as Employer)!.Vacancies.Count - 1]);
+                            (currentUser?.Profile as Employer)?.AddVacancy();
+                            vacancies?.Add((currentUser?.Profile as Employer)!.Vacancies[(currentUser!.Profile as Employer)!.Vacancies.Count - 1]);
                             break;
 
                         case 1:
@@ -498,6 +509,9 @@ internal static class BossAz
                             break;
 
                         case 3:
+                            goto register;
+
+                        case 4:
                             exit = true;
                             break;
 
@@ -505,7 +519,6 @@ internal static class BossAz
                 }
             }
         }
-
 
         File.WriteAllText(usersData.FullName, JsonSerializer.Serialize(users));
         File.WriteAllText(CVData.FullName, JsonSerializer.Serialize(cvs));
