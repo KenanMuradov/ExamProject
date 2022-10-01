@@ -12,13 +12,17 @@ using Human;
 using Work;
 internal static class Help
 {
-
     public static string[] startMenu = new[] { "Register", "Log in", "Exit" };
     public static string[] typeChoose = new[] { "As Worker", "As Employer", "Back", "Exit" };
-    public static string[] workerCommands = new[] { "Create CV", "See Vacancies", "Filter Vacancies", "Back", "Exit" };
+    public static string[] workerCommands = new[] { "Create CV", "Send CV", "See Vacancies", "Filter Vacancies", "Back", "Exit" };
     public static string[] employerCommands = new[] { "Add vacancy", "See CVs", "Filter Workers", "Back", "Exit" };
 
-
+    public static void ErrorMessage(string message, string logMessage)
+    {
+        CallLog().Error(logMessage);
+        Console.WriteLine(message);
+        Console.ReadKey(true);
+    }
 
     public static ILogger CallLog()
     {

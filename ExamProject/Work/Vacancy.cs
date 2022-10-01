@@ -10,6 +10,8 @@ using static Help;
 
 internal class Vacancy
 {
+    public List<CV> ReceivedCVs;
+
     public sbyte MaxAge { get; set; }
     public sbyte MinExperience { get; set; }
     public EducationLevel RequiredEducation { get; set; }
@@ -70,6 +72,7 @@ internal class Vacancy
         RequiredEducation = requiredEducation;
         Salary = salary;
         Information = information;
+        ReceivedCVs = new();
     }
 
 
@@ -169,6 +172,7 @@ Max Age: {MaxAge} years
 Min Experience: {MinExperience} years
 Required Education Level: {RequiredEducation}
 Salary: {Salary} $
+Received CV: {ReceivedCVs.Count}
 Information about work
 {Information}";
 

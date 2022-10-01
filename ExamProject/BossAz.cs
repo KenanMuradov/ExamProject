@@ -250,6 +250,29 @@ internal static class BossAz
                             break;
 
                         case 1:
+                            if((currentUser!.Profile as Worker)!.CV is null)
+                            {
+                                ErrorMessage("First You Have to create CV", "CV send error");
+                                continue;
+                            }
+
+                            Console.WriteLine("Enter Job name");
+                            string job = Console.ReadLine()!;
+
+                            if(string.IsNullOrWhiteSpace(job))
+                            {
+                                ErrorMessage("Entered Wrong Information", "CV send error");
+                                continue;
+                            }
+
+                            foreach (var vacancy in vacancies!)
+                            {
+                                if (vacancy.Job == job)
+                                    vacancy.ReceivedCVs.Add((currentUser!.Profile as Worker)!.CV);
+                            }
+
+                            break;
+                        case 2:
                             foreach (var v in vacancies!)
                             {
                                 Console.WriteLine(v);
@@ -258,7 +281,7 @@ internal static class BossAz
                             break;
 
 
-                        case 2:
+                        case 3:
                             index = 0;
                             while (!exit)
                             {
@@ -277,26 +300,20 @@ internal static class BossAz
                                             Console.WriteLine("Enter minimum salary");
                                             if (!double.TryParse(Console.ReadLine()!, out double minSalary))
                                             {
-                                                CallLog().Error("Filter Error");
-                                                Console.WriteLine("Entered Wrong information");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
                                             Console.WriteLine("Enter maximum salary");
                                             if (!double.TryParse(Console.ReadLine()!, out double maxSalary))
                                             {
-                                                CallLog().Error("Filter Error");
-                                                Console.WriteLine("Entered Wrong information");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
                                             if (minSalary > maxSalary)
                                             {
-                                                CallLog().Error("Filter Error");
-                                                Console.WriteLine("Entered Wrong information");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
@@ -310,17 +327,13 @@ internal static class BossAz
                                             Console.WriteLine("Enter The age");
                                             if (!sbyte.TryParse(Console.ReadLine()!, out sbyte age))
                                             {
-                                                CallLog().Error("Filter Error");
-                                                Console.WriteLine("Entered Wrong information");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
                                             if (age < 18)
                                             {
-                                                CallLog().Error("Filter Error");
-                                                Console.WriteLine("Entered Wrong information");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
@@ -337,16 +350,14 @@ internal static class BossAz
 
                                             if (!sbyte.TryParse(Console.ReadLine(), out sbyte educationLevel))
                                             {
-                                                Console.WriteLine("Entered Wrong information please try again");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
                                             educationLevel--;
                                             if (educationLevel < 0 || educationLevel > 5)
                                             {
-                                                Console.WriteLine("Entered Wrong information please try again");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
@@ -384,10 +395,10 @@ internal static class BossAz
                             exit = false;
                             break;
 
-                        case 3:
+                        case 4:
                             goto register;
 
-                        case 4:
+                        case 5:
                             exit = true;
                             break;
 
@@ -458,16 +469,14 @@ internal static class BossAz
 
                                             if (!sbyte.TryParse(Console.ReadLine(), out sbyte educationLevel))
                                             {
-                                                Console.WriteLine("Entered Wrong information please try again");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
                                             educationLevel--;
                                             if (educationLevel < 0 || educationLevel > 5)
                                             {
-                                                Console.WriteLine("Entered Wrong information please try again");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
@@ -483,9 +492,7 @@ internal static class BossAz
                                             Console.WriteLine("Enter The experience in years");
                                             if (!sbyte.TryParse(Console.ReadLine()!, out sbyte experience))
                                             {
-                                                CallLog().Error("Filter Error");
-                                                Console.WriteLine("Entered Wrong information");
-                                                Console.ReadKey(true);
+                                                ErrorMessage("Entered Wrong Information", "Filter Error");
                                                 continue;
                                             }
 
